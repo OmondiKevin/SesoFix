@@ -60,12 +60,18 @@ def parse_args():
                         help="Learning rate")
     parser.add_argument("--early_stopping_patience", type=int, default=3,
                         help="Early stopping patience")
+    parser.add_argument("--dry-run", action="store_true",
+                        help="Run script in dry-run mode (for CI/CD test)")
 
     return parser.parse_args()
 
 def main():
     """Main training function."""
     args = parse_args()
+
+    if args.dry_run:
+        logger.info("[DRY RUN] Skipping training. Arguments parsed and script structure valid.")
+        sys.exit(0)
 
     # Load data
     logger.info("Loading data...")
