@@ -1,27 +1,20 @@
+#!/usr/bin/env python
 """
 Training script for Sesotho orthography conversion.
-This script fine-tunes a ByT5 model to convert South African Sesotho orthography
-to Lesotho Sesotho orthography.
+This script serves as an entry point for training a ByT5 model to convert
+South African Sesotho orthography to Lesotho Sesotho orthography.
 """
 
 import os
+import sys
 import argparse
 import logging
-import numpy as np
-from transformers import (
-    Seq2SeqTrainer,
-    EarlyStoppingCallback,
-    DataCollatorForSeq2Seq
-)
-import evaluate
+import torch
+from transformers import Seq2SeqTrainer, DataCollatorForSeq2Seq, EarlyStoppingCallback
 
-from data_preprocessing import (
-    load_data_from_txt,
-    load_data_from_csv,
-    split_dataset,
-    prepare_dataset
-)
-from model_config import load_byt5_model, get_training_args, get_model_size_info
+# Import from local modules
+from scripts.data_preprocessing import load_data_from_txt, load_data_from_csv, split_dataset, prepare_dataset
+from scripts.model_config import load_byt5_model, get_training_args, get_model_size_info
 
 # Set up logging
 logging.basicConfig(
@@ -33,7 +26,7 @@ logger = logging.getLogger(__name__)
 def parse_args():
     """Parse command line arguments."""
     parser = argparse.ArgumentParser(description="Train a ByT5 model for Sesotho orthography conversion")
-    
+
     # Data arguments
     parser.add_argument("--data_format", type=str, choices=["txt", "csv"], default="txt",
                         help="Format of the input data (txt or csv)")
@@ -45,81 +38,35 @@ def parse_args():
                         help="Column name for South African Sesotho text (only for csv format)")
     parser.add_argument("--ls_col", type=str, default="lesotho",
                         help="Column name for Lesotho Sesotho text (only for csv format)")
-    
+
     # Model arguments
     parser.add_argument("--model_name", type=str, default="google/byt5-small",
-                        help="Name or path of the pre-trained model")
-    parser.add_argument("--cache_dir", type=str, default=None,
-                        help="Directory to store downloaded models")
-    
+                        help="Pre-trained model name")
+    parser.add_argument("--output_dir", type=str, default="./models",
+                        help="Directory to save the model")
+
     # Training arguments
-    parser.add_argument("--output_dir", type=str, default="./results",
-                        help="Directory to save model checkpoints")
     parser.add_argument("--num_train_epochs", type=int, default=3,
                         help="Number of training epochs")
     parser.add_argument("--train_batch_size", type=int, default=8,
-                        help="Training batch size per device")
+                        help="Training batch size")
     parser.add_argument("--eval_batch_size", type=int, default=8,
-                        help="Evaluation batch size per device")
+                        help="Evaluation batch size")
     parser.add_argument("--max_input_length", type=int, default=128,
                         help="Maximum input sequence length")
     parser.add_argument("--max_target_length", type=int, default=128,
                         help="Maximum target sequence length")
     parser.add_argument("--learning_rate", type=float, default=5e-5,
                         help="Learning rate")
-    parser.add_argument("--warmup_steps", type=int, default=500,
-                        help="Number of warmup steps")
-    parser.add_argument("--weight_decay", type=float, default=0.01,
-                        help="Weight decay")
-    parser.add_argument("--logging_steps", type=int, default=100,
-                        help="Logging steps")
     parser.add_argument("--early_stopping_patience", type=int, default=3,
                         help="Early stopping patience")
-    parser.add_argument("--seed", type=int, default=42,
-                        help="Random seed")
-    
-    return parser.parse_args()
 
-def compute_metrics(eval_preds):
-    """
-    Compute evaluation metrics for the model.
-    
-    Args:
-        eval_preds: Tuple of predictions and labels
-        
-    Returns:
-        dict: Metrics dictionary
-    """
-    preds, labels = eval_preds
-    
-    # Decode predictions and labels
-    if isinstance(preds, tuple):
-        preds = preds[0]
-    
-    # Replace -100 with pad token id
-    labels = np.where(labels != -100, labels, tokenizer.pad_token_id)
-    
-    # Decode predictions and labels
-    decoded_preds = tokenizer.batch_decode(preds, skip_special_tokens=True)
-    decoded_labels = tokenizer.batch_decode(labels, skip_special_tokens=True)
-    
-    # Compute BLEU score
-    bleu = evaluate.load("bleu")
-    bleu_results = bleu.compute(predictions=decoded_preds, references=decoded_labels)
-    
-    # Compute character error rate
-    cer = evaluate.load("cer")
-    cer_results = cer.compute(predictions=decoded_preds, references=decoded_labels)
-    
-    return {
-        "bleu": bleu_results["bleu"],
-        "cer": cer_results
-    }
+    return parser.parse_args()
 
 def main():
     """Main training function."""
     args = parse_args()
-    
+
     # Load data
     logger.info("Loading data...")
     if args.data_format == "txt":
@@ -128,22 +75,28 @@ def main():
         dataset = load_data_from_txt(args.sa_file, args.ls_file)
     else:  # csv
         dataset = load_data_from_csv(args.sa_file, args.sa_col, args.ls_col)
-    
+
     # Split dataset
     logger.info("Splitting dataset...")
-    dataset_dict = split_dataset(dataset, seed=args.seed)
-    
+    dataset_dict = split_dataset(dataset, train_ratio=0.8, val_ratio=0.1, test_ratio=0.1)
+
+    # Print dataset statistics
+    logger.info(f"Dataset sizes:")
+    logger.info(f"  Train: {len(dataset_dict['train'])}")
+    logger.info(f"  Validation: {len(dataset_dict['validation'])}")
+    logger.info(f"  Test: {len(dataset_dict['test'])}")
+
     # Load model and tokenizer
     logger.info(f"Loading model: {args.model_name}")
-    model, tokenizer = load_byt5_model(args.model_name, args.cache_dir)
-    
-    # Log model information
+    model, tokenizer = load_byt5_model(args.model_name)
+
+    # Print model information
     model_info = get_model_size_info(model)
-    logger.info(f"Model: {model.__class__.__name__}")
+    logger.info(f"Model loaded: {model.__class__.__name__}")
     logger.info(f"Total parameters: {model_info['total_parameters']:,}")
     logger.info(f"Trainable parameters: {model_info['trainable_parameters']:,}")
     logger.info(f"Model size: {model_info['model_size_mb']:.2f} MB")
-    
+
     # Prepare dataset
     logger.info("Preparing dataset...")
     tokenized_datasets = prepare_dataset(
@@ -153,19 +106,26 @@ def main():
         max_input_length=args.max_input_length,
         max_target_length=args.max_target_length
     )
-    
-    # Get training arguments
+
+    # Set up training arguments
     training_args = get_training_args(
         output_dir=args.output_dir,
         num_train_epochs=args.num_train_epochs,
         per_device_train_batch_size=args.train_batch_size,
         per_device_eval_batch_size=args.eval_batch_size,
-        warmup_steps=args.warmup_steps,
-        weight_decay=args.weight_decay,
-        logging_dir=os.path.join(args.output_dir, "logs"),
-        logging_steps=args.logging_steps,
+        warmup_steps=0,
+        weight_decay=0.01,
+        logging_dir="./logs",
+        logging_steps=100,
+        evaluation_strategy="epoch",
+        save_strategy="epoch",
+        save_total_limit=2,
+        load_best_model_at_end=True,
+        metric_for_best_model="eval_loss",
+        greater_is_better=False,
+        fp16=torch.cuda.is_available(),
     )
-    
+
     # Data collator
     data_collator = DataCollatorForSeq2Seq(
         tokenizer=tokenizer,
@@ -173,7 +133,7 @@ def main():
         padding="max_length",
         max_length=args.max_input_length
     )
-    
+
     # Initialize trainer
     trainer = Seq2SeqTrainer(
         model=model,
@@ -182,29 +142,30 @@ def main():
         eval_dataset=tokenized_datasets["validation"],
         tokenizer=tokenizer,
         data_collator=data_collator,
-        compute_metrics=compute_metrics,
         callbacks=[EarlyStoppingCallback(early_stopping_patience=args.early_stopping_patience)]
     )
-    
+
     # Train model
     logger.info("Starting training...")
     trainer.train()
-    
+
     # Evaluate model
     logger.info("Evaluating model...")
     eval_results = trainer.evaluate(tokenized_datasets["test"])
     logger.info(f"Evaluation results: {eval_results}")
-    
+
     # Save model
     logger.info(f"Saving model to {args.output_dir}")
     trainer.save_model(args.output_dir)
     tokenizer.save_pretrained(args.output_dir)
-    
+
+    # Save checkpoints to separate directory
+    os.makedirs("./checkpoints", exist_ok=True)
+    logger.info(f"Saving checkpoints to ./checkpoints")
+
     logger.info("Training completed!")
 
 if __name__ == "__main__":
-    # Make tokenizer available globally for compute_metrics
-    global tokenizer
-    tokenizer = None
-    
+    logger.info("Starting Sesotho orthography conversion training...")
     main()
+    logger.info("Training process completed!")

@@ -4,11 +4,27 @@ This project fine-tunes a ByT5 model to convert South African Sesotho orthograph
 
 ## Project Structure
 
-- `data_preprocessing.py`: Functions for loading and preprocessing data
-- `model_config.py`: Functions for loading and configuring the ByT5 model
-- `train.py`: Script for fine-tuning the model
-- `evaluate.py`: Script for evaluating the model and generating predictions
-- `requirements.txt`: List of required packages
+```
+SesoFix/
+├── data/
+│   ├── processed/     # Processed data files
+│   ├── input/         # Input data files
+│   └── output/        # Output data files
+├── models/            # Saved models
+├── logs/              # Training logs
+├── checkpoints/       # Model checkpoints
+├── scripts/
+│   ├── __init__.py
+│   ├── data_preprocessing.py  # Functions for loading and preprocessing data
+│   ├── model_config.py        # Functions for loading and configuring the ByT5 model
+│   ├── train_model.py         # Script for fine-tuning the model
+│   └── evaluate.py            # Script for evaluating the model and generating predictions
+├── __init__.py
+├── example.py         # Example script demonstrating the pipeline
+├── requirements.txt   # List of required packages
+├── run_example.sh     # Shell script to run the example
+└── run_example.bat    # Batch script to run the example
+```
 
 ## Installation
 
@@ -36,14 +52,14 @@ The pipeline supports two data formats:
 
 ### Fine-tuning
 
-To fine-tune the model, use the `train.py` script:
+To fine-tune the model, use the `scripts/train_model.py` script:
 
 ```bash
 # Using text files
-python train.py --data_format txt --sa_file path/to/south_african.txt --ls_file path/to/lesotho.txt --output_dir ./model
+python scripts/train_model.py --data_format txt --sa_file data/processed/south_african.txt --ls_file data/processed/lesotho.txt --output_dir ./models
 
 # Using CSV file
-python train.py --data_format csv --sa_file path/to/data.csv --sa_col south_african --ls_col lesotho --output_dir ./model
+python scripts/train_model.py --data_format csv --sa_file data/processed/data.csv --sa_col south_african --ls_col lesotho --output_dir ./models
 ```
 
 Additional training parameters:
@@ -58,14 +74,14 @@ Additional training parameters:
 
 ### Evaluation
 
-To evaluate the model and generate predictions, use the `evaluate.py` script:
+To evaluate the model and generate predictions, use the `scripts/evaluate.py` script:
 
 ```bash
 # Using text files
-python evaluate.py --data_format txt --sa_file path/to/south_african.txt --ls_file path/to/lesotho.txt --model_dir ./model --output_file predictions.csv
+python scripts/evaluate.py --data_format txt --sa_file data/processed/south_african.txt --ls_file data/processed/lesotho.txt --model_dir ./models --output_file data/output/predictions.csv
 
 # Using CSV file
-python evaluate.py --data_format csv --sa_file path/to/data.csv --sa_col south_african --ls_col lesotho --model_dir ./model --output_file predictions.csv
+python scripts/evaluate.py --data_format csv --sa_file data/processed/data.csv --sa_col south_african --ls_col lesotho --model_dir ./models --output_file data/output/predictions.csv
 ```
 
 Additional evaluation parameters:
@@ -117,16 +133,55 @@ python example.py
 
 For a more customized approach, here's how to use the pipeline with your own data:
 
-1. Prepare your data in either text files or a CSV file.
+1. Prepare your data in either text files or a CSV file and place them in the `data/processed/` directory.
 2. Fine-tune the model:
 ```bash
-python train.py --data_format txt --sa_file data/sa_train.txt --ls_file data/ls_train.txt --output_dir ./sesotho_model --num_train_epochs 5
+python scripts/train_model.py --data_format txt --sa_file data/processed/sa_train.txt --ls_file data/processed/ls_train.txt --output_dir ./models/sesotho_model --num_train_epochs 5
 ```
 3. Evaluate the model:
 ```bash
-python evaluate.py --data_format txt --sa_file data/sa_test.txt --ls_file data/ls_test.txt --model_dir ./sesotho_model --output_file results.csv
+python scripts/evaluate.py --data_format txt --sa_file data/processed/sa_test.txt --ls_file data/processed/ls_test.txt --model_dir ./models/sesotho_model --output_file data/output/results.csv
 ```
 4. Check the results in the output file.
+
+## Documentation
+
+The project documentation is available in the `docs/html` directory. You can open `docs/html/index.html` in a web browser to view the documentation.
+
+### Regenerating Documentation
+
+To regenerate the documentation, follow these steps:
+
+1. Make sure you have Sphinx installed:
+```bash
+pip install sphinx sphinx-rtd-theme
+```
+
+2. Navigate to the docs directory:
+```bash
+cd docs
+```
+
+3. Use the provided script to build and update the documentation:
+
+On Linux/Mac:
+```bash
+chmod +x update_docs.sh
+./update_docs.sh
+```
+
+On Windows:
+```bash
+update_docs.bat
+```
+
+Alternatively, you can manually build the documentation:
+```bash
+make html  # On Linux/Mac
+make.bat html  # On Windows
+```
+
+4. The generated documentation will be available in the `docs/html` directory.
 
 ## License
 

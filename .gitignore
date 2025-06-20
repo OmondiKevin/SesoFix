@@ -60,8 +60,18 @@ data/processed/*
 !data/output/.gitkeep
 !data/processed/.gitkeep
 
-# Ignore contents of models and logs folders
+# Ignore contents of models, logs, checkpoints, cache, and temp folders
 models/*
 logs/*
+checkpoints/*
+cache/*
+temp/*
 !models/.gitkeep
 !logs/.gitkeep
+!checkpoints/.gitkeep
+!cache/.gitkeep
+!temp/.gitkeep
+
+# Ignore contents of scripts folder except train_model.py
+scripts/*
+!scripts/train_model.py
