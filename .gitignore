@@ -40,3 +40,13 @@ data/
 *.swp
 *.swo
 .DS_Store
+
+# Ignore all contents in these folders
+data/input/*
+data/output/*
+data/processed/*
+
+# But keep the .gitkeep files
+!data/input/.gitkeep
+!data/output/.gitkeep
+!data/processed/.gitkeep
