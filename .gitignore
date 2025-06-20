@@ -50,3 +50,18 @@ data/processed/*
 !data/input/.gitkeep
 !data/output/.gitkeep
 !data/processed/.gitkeep
+
+
+# Ignore contents of data folders
+data/input/*
+data/output/*
+data/processed/*
+!data/input/.gitkeep
+!data/output/.gitkeep
+!data/processed/.gitkeep
+
+# Ignore contents of models and logs folders
+models/*
+logs/*
+!models/.gitkeep
+!logs/.gitkeep
