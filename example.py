@@ -5,15 +5,15 @@ This script demonstrates how to use the SesoFix pipeline with a small sample dat
 
 import os
 import pandas as pd
-from data_preprocessing import load_data_from_csv, split_dataset, prepare_dataset
-from model_config import load_byt5_model, get_training_args
+from scripts.data_preprocessing import load_data_from_csv, split_dataset, prepare_dataset
+from scripts.model_config import load_byt5_model, get_training_args
 from transformers import Seq2SeqTrainer, DataCollatorForSeq2Seq, EarlyStoppingCallback
 
 def create_sample_data():
     """Create a small sample dataset for demonstration."""
     # Create directories if they don't exist
-    os.makedirs("data", exist_ok=True)
-    
+    os.makedirs("data/processed", exist_ok=True)
+
     # Sample data: South African Sesotho to Lesotho Sesotho pairs
     # These are simplified examples for demonstration purposes
     sample_data = {
@@ -42,12 +42,12 @@ def create_sample_data():
             "Metsi a pholile."
         ]
     }
-    
+
     # Create a DataFrame and save to CSV
     df = pd.DataFrame(sample_data)
-    csv_path = "data/sample_data.csv"
+    csv_path = "data/processed/sample_data.csv"
     df.to_csv(csv_path, index=False)
-    
+
     print(f"Sample data created and saved to {csv_path}")
     return csv_path
 
@@ -55,25 +55,25 @@ def run_example():
     """Run the example pipeline."""
     # Create sample data
     csv_path = create_sample_data()
-    
+
     # Load data
     print("Loading data...")
     dataset = load_data_from_csv(csv_path)
-    
+
     # Split dataset
     print("Splitting dataset...")
     dataset_dict = split_dataset(dataset, train_ratio=0.6, val_ratio=0.2, test_ratio=0.2)
-    
+
     # Print dataset statistics
     print(f"Dataset sizes:")
     print(f"  Train: {len(dataset_dict['train'])}")
     print(f"  Validation: {len(dataset_dict['validation'])}")
     print(f"  Test: {len(dataset_dict['test'])}")
-    
+
     # Load model and tokenizer
     print("Loading model...")
     model, tokenizer = load_byt5_model("google/byt5-small")
-    
+
     # Prepare dataset
     print("Preparing dataset...")
     tokenized_datasets = prepare_dataset(
@@ -83,16 +83,16 @@ def run_example():
         max_input_length=64,
         max_target_length=64
     )
-    
+
     # Set up training arguments
     training_args = get_training_args(
-        output_dir="./example_model",
+        output_dir="./models/example_model",
         num_train_epochs=5,
         per_device_train_batch_size=2,
         per_device_eval_batch_size=2,
         warmup_steps=0,
         weight_decay=0.01,
-        logging_dir="./example_logs",
+        logging_dir="./logs/example_logs",
         logging_steps=1,
         evaluation_strategy="epoch",
         save_strategy="epoch",
@@ -102,7 +102,7 @@ def run_example():
         greater_is_better=False,
         fp16=False,  # Set to False for CPU training
     )
-    
+
     # Data collator
     data_collator = DataCollatorForSeq2Seq(
         tokenizer=tokenizer,
@@ -110,7 +110,7 @@ def run_example():
         padding="max_length",
         max_length=64
     )
-    
+
     # Initialize trainer
     trainer = Seq2SeqTrainer(
         model=model,
@@ -121,21 +121,24 @@ def run_example():
         data_collator=data_collator,
         callbacks=[EarlyStoppingCallback(early_stopping_patience=3)]
     )
-    
+
     # Train model
     print("Starting training...")
     trainer.train()
-    
+
     # Evaluate model
     print("Evaluating model...")
     eval_results = trainer.evaluate(tokenized_datasets["test"])
     print(f"Evaluation results: {eval_results}")
-    
+
     # Save model
     print("Saving model...")
-    trainer.save_model("./example_model")
-    tokenizer.save_pretrained("./example_model")
-    
+    trainer.save_model("./models/example_model")
+    tokenizer.save_pretrained("./models/example_model")
+
+    # Create checkpoints directory if it doesn't exist
+    os.makedirs("./checkpoints", exist_ok=True)
+
     # Test inference
     print("\nTesting inference with examples:")
     test_examples = [
@@ -143,7 +146,7 @@ def run_example():
         "O ya kae?",
         "Metsi a phodile."
     ]
-    
+
     model.eval()
     for example in test_examples:
         inputs = tokenizer(example, return_tensors="pt", padding=True, truncation=True)
@@ -151,7 +154,7 @@ def run_example():
         prediction = tokenizer.decode(outputs[0], skip_special_tokens=True)
         print(f"Input: {example}")
         print(f"Prediction: {prediction}\n")
-    
+
     print("Example completed!")
 
 if __name__ == "__main__":

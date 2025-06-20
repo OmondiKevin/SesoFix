@@ -40,3 +40,38 @@ data/
 *.swp
 *.swo
 .DS_Store
+
+# Ignore all contents in these folders
+data/input/*
+data/output/*
+data/processed/*
+
+# But keep the .gitkeep files
+!data/input/.gitkeep
+!data/output/.gitkeep
+!data/processed/.gitkeep
+
+
+# Ignore contents of data folders
+data/input/*
+data/output/*
+data/processed/*
+!data/input/.gitkeep
+!data/output/.gitkeep
+!data/processed/.gitkeep
+
+# Ignore contents of models, logs, checkpoints, cache, and temp folders
+models/*
+logs/*
+checkpoints/*
+cache/*
+temp/*
+!models/.gitkeep
+!logs/.gitkeep
+!checkpoints/.gitkeep
+!cache/.gitkeep
+!temp/.gitkeep
+
+# Ignore contents of scripts folder except train_model.py
+scripts/*
+!scripts/train_model.py

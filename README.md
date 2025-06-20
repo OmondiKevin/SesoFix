@@ -2,31 +2,29 @@
 
 This project fine-tunes a ByT5 model to convert South African Sesotho orthography to Lesotho Sesotho orthography. The model is trained to take South African Sesotho text as input and produce the corrected Lesotho Sesotho equivalent as output.
 
-## Background
-
-Sesotho (Southern Sotho) is a Bantu language spoken primarily in South Africa and Lesotho. Despite being the same language, there are systematic orthographic (spelling) differences between the variants used in these two countries. These differences emerged due to separate standardization processes during the colonial period.
-
-For example:
-- South African: "Ke rata ho bala **dibuka**."
-- Lesotho: "Ke rata ho bala **libuka**."
-- (Translation: "I like to read books.")
-
-For a detailed explanation of these differences, see the [Orthography Differences](docs/orthography_differences.md) documentation.
-
 ## Project Structure
 
-- `data_preprocessing.py`: Functions for loading and preprocessing data
-- `model_config.py`: Functions for loading and configuring the ByT5 model
-- `train.py`: Script for fine-tuning the model
-- `evaluate.py`: Script for evaluating the model and generating predictions
-- `example.py`: Example script demonstrating the complete pipeline
-- `requirements.txt`: List of required packages
-- `docs/`: Detailed documentation
-  - [Documentation Index](docs/index.md): Central navigation point for all documentation
-  - [Technical Documentation](docs/technical.md): Details about model architecture and implementation
-  - [User Guide](docs/user_guide.md): Step-by-step instructions for using the pipeline
-  - [Orthography Differences](docs/orthography_differences.md): Explanation of Sesotho orthography differences
-  - [Troubleshooting Guide](docs/troubleshooting.md): Solutions to common issues
+```
+SesoFix/
+├── data/
+│   ├── processed/     # Processed data files
+│   ├── input/         # Input data files
+│   └── output/        # Output data files
+├── models/            # Saved models
+├── logs/              # Training logs
+├── checkpoints/       # Model checkpoints
+├── scripts/
+│   ├── __init__.py
+│   ├── data_preprocessing.py  # Functions for loading and preprocessing data
+│   ├── model_config.py        # Functions for loading and configuring the ByT5 model
+│   ├── train_model.py         # Script for fine-tuning the model
+│   └── evaluate.py            # Script for evaluating the model and generating predictions
+├── __init__.py
+├── example.py         # Example script demonstrating the pipeline
+├── requirements.txt   # List of required packages
+├── run_example.sh     # Shell script to run the example
+└── run_example.bat    # Batch script to run the example
+```
 
 ## Installation
 
@@ -54,14 +52,14 @@ The pipeline supports two data formats:
 
 ### Fine-tuning
 
-To fine-tune the model, use the `train.py` script:
+To fine-tune the model, use the `scripts/train_model.py` script:
 
 ```bash
 # Using text files
-python train.py --data_format txt --sa_file path/to/south_african.txt --ls_file path/to/lesotho.txt --output_dir ./model
+python scripts/train_model.py --data_format txt --sa_file data/processed/south_african.txt --ls_file data/processed/lesotho.txt --output_dir ./models
 
 # Using CSV file
-python train.py --data_format csv --sa_file path/to/data.csv --sa_col south_african --ls_col lesotho --output_dir ./model
+python scripts/train_model.py --data_format csv --sa_file data/processed/data.csv --sa_col south_african --ls_col lesotho --output_dir ./models
 ```
 
 Additional training parameters:
@@ -76,14 +74,14 @@ Additional training parameters:
 
 ### Evaluation
 
-To evaluate the model and generate predictions, use the `evaluate.py` script:
+To evaluate the model and generate predictions, use the `scripts/evaluate.py` script:
 
 ```bash
 # Using text files
-python evaluate.py --data_format txt --sa_file path/to/south_african.txt --ls_file path/to/lesotho.txt --model_dir ./model --output_file predictions.csv
+python scripts/evaluate.py --data_format txt --sa_file data/processed/south_african.txt --ls_file data/processed/lesotho.txt --model_dir ./models --output_file data/output/predictions.csv
 
 # Using CSV file
-python evaluate.py --data_format csv --sa_file path/to/data.csv --sa_col south_african --ls_col lesotho --model_dir ./model --output_file predictions.csv
+python scripts/evaluate.py --data_format csv --sa_file data/processed/data.csv --sa_col south_african --ls_col lesotho --model_dir ./models --output_file data/output/predictions.csv
 ```
 
 Additional evaluation parameters:
@@ -91,23 +89,11 @@ Additional evaluation parameters:
 - `--max_length`: Maximum sequence length (default: 128)
 - `--device`: Device to use for inference (default: "cuda" if available, else "cpu")
 
-## Model Architecture
+## Model Selection
 
-### ByT5 Model
+The default model used is `google/byt5-small`, which is a byte-level T5 model that can handle any Unicode text. This makes it suitable for processing Sesotho text without the need for a specialized tokenizer.
 
-SesoFix uses the ByT5 model, a byte-level variant of the T5 (Text-to-Text Transfer Transformer) model. Key features of ByT5:
-
-- **Byte-level tokenization**: Unlike most transformer models that use subword tokenization, ByT5 operates directly on UTF-8 bytes. This makes it particularly suitable for languages like Sesotho, as it doesn't require a specialized tokenizer.
-- **Encoder-Decoder architecture**: ByT5 follows the encoder-decoder architecture of T5, making it well-suited for sequence-to-sequence tasks like orthography conversion.
-- **Pre-trained on multilingual data**: The model has been pre-trained on a large corpus of multilingual text, providing a good starting point for fine-tuning on Sesotho.
-
-For more detailed information about the model architecture and implementation, see the [Technical Documentation](docs/technical.md).
-
-### Model Selection
-
-The default model used is `google/byt5-small`, which provides a good balance between performance and resource requirements.
-
-Available ByT5 model sizes:
+Other ByT5 model sizes available:
 - `google/byt5-small`: 300M parameters
 - `google/byt5-base`: 580M parameters
 - `google/byt5-large`: 1.2B parameters
@@ -147,24 +133,55 @@ python example.py
 
 For a more customized approach, here's how to use the pipeline with your own data:
 
-1. Prepare your data in either text files or a CSV file.
+1. Prepare your data in either text files or a CSV file and place them in the `data/processed/` directory.
 2. Fine-tune the model:
 ```bash
-python train.py --data_format txt --sa_file data/sa_train.txt --ls_file data/ls_train.txt --output_dir ./sesotho_model --num_train_epochs 5
+python scripts/train_model.py --data_format txt --sa_file data/processed/sa_train.txt --ls_file data/processed/ls_train.txt --output_dir ./models/sesotho_model --num_train_epochs 5
 ```
 3. Evaluate the model:
 ```bash
-python evaluate.py --data_format txt --sa_file data/sa_test.txt --ls_file data/ls_test.txt --model_dir ./sesotho_model --output_file results.csv
+python scripts/evaluate.py --data_format txt --sa_file data/processed/sa_test.txt --ls_file data/processed/ls_test.txt --model_dir ./models/sesotho_model --output_file data/output/results.csv
 ```
 4. Check the results in the output file.
 
-## Troubleshooting
+## Documentation
 
-If you encounter any issues while using SesoFix, please refer to the [Troubleshooting Guide](docs/troubleshooting.md) for solutions to common problems.
+The project documentation is available in the `docs/html` directory. You can open `docs/html/index.html` in a web browser to view the documentation.
 
-## Contributing
+### Regenerating Documentation
 
-Contributions to SesoFix are welcome! Please see the [Contributing Guidelines](CONTRIBUTING.md) for more information on how to get involved.
+To regenerate the documentation, follow these steps:
+
+1. Make sure you have Sphinx installed:
+```bash
+pip install sphinx sphinx-rtd-theme
+```
+
+2. Navigate to the docs directory:
+```bash
+cd docs
+```
+
+3. Use the provided script to build and update the documentation:
+
+On Linux/Mac:
+```bash
+chmod +x update_docs.sh
+./update_docs.sh
+```
+
+On Windows:
+```bash
+update_docs.bat
+```
+
+Alternatively, you can manually build the documentation:
+```bash
+make html  # On Linux/Mac
+make.bat html  # On Windows
+```
+
+4. The generated documentation will be available in the `docs/html` directory.
 
 ## License
 
