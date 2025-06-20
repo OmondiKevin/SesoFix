@@ -2,13 +2,31 @@
 
 This project fine-tunes a ByT5 model to convert South African Sesotho orthography to Lesotho Sesotho orthography. The model is trained to take South African Sesotho text as input and produce the corrected Lesotho Sesotho equivalent as output.
 
+## Background
+
+Sesotho (Southern Sotho) is a Bantu language spoken primarily in South Africa and Lesotho. Despite being the same language, there are systematic orthographic (spelling) differences between the variants used in these two countries. These differences emerged due to separate standardization processes during the colonial period.
+
+For example:
+- South African: "Ke rata ho bala **dibuka**."
+- Lesotho: "Ke rata ho bala **libuka**."
+- (Translation: "I like to read books.")
+
+For a detailed explanation of these differences, see the [Orthography Differences](docs/orthography_differences.md) documentation.
+
 ## Project Structure
 
 - `data_preprocessing.py`: Functions for loading and preprocessing data
 - `model_config.py`: Functions for loading and configuring the ByT5 model
 - `train.py`: Script for fine-tuning the model
 - `evaluate.py`: Script for evaluating the model and generating predictions
+- `example.py`: Example script demonstrating the complete pipeline
 - `requirements.txt`: List of required packages
+- `docs/`: Detailed documentation
+  - [Documentation Index](docs/index.md): Central navigation point for all documentation
+  - [Technical Documentation](docs/technical.md): Details about model architecture and implementation
+  - [User Guide](docs/user_guide.md): Step-by-step instructions for using the pipeline
+  - [Orthography Differences](docs/orthography_differences.md): Explanation of Sesotho orthography differences
+  - [Troubleshooting Guide](docs/troubleshooting.md): Solutions to common issues
 
 ## Installation
 
@@ -73,11 +91,23 @@ Additional evaluation parameters:
 - `--max_length`: Maximum sequence length (default: 128)
 - `--device`: Device to use for inference (default: "cuda" if available, else "cpu")
 
-## Model Selection
+## Model Architecture
 
-The default model used is `google/byt5-small`, which is a byte-level T5 model that can handle any Unicode text. This makes it suitable for processing Sesotho text without the need for a specialized tokenizer.
+### ByT5 Model
 
-Other ByT5 model sizes available:
+SesoFix uses the ByT5 model, a byte-level variant of the T5 (Text-to-Text Transfer Transformer) model. Key features of ByT5:
+
+- **Byte-level tokenization**: Unlike most transformer models that use subword tokenization, ByT5 operates directly on UTF-8 bytes. This makes it particularly suitable for languages like Sesotho, as it doesn't require a specialized tokenizer.
+- **Encoder-Decoder architecture**: ByT5 follows the encoder-decoder architecture of T5, making it well-suited for sequence-to-sequence tasks like orthography conversion.
+- **Pre-trained on multilingual data**: The model has been pre-trained on a large corpus of multilingual text, providing a good starting point for fine-tuning on Sesotho.
+
+For more detailed information about the model architecture and implementation, see the [Technical Documentation](docs/technical.md).
+
+### Model Selection
+
+The default model used is `google/byt5-small`, which provides a good balance between performance and resource requirements.
+
+Available ByT5 model sizes:
 - `google/byt5-small`: 300M parameters
 - `google/byt5-base`: 580M parameters
 - `google/byt5-large`: 1.2B parameters
@@ -127,6 +157,14 @@ python train.py --data_format txt --sa_file data/sa_train.txt --ls_file data/ls_
 python evaluate.py --data_format txt --sa_file data/sa_test.txt --ls_file data/ls_test.txt --model_dir ./sesotho_model --output_file results.csv
 ```
 4. Check the results in the output file.
+
+## Troubleshooting
+
+If you encounter any issues while using SesoFix, please refer to the [Troubleshooting Guide](docs/troubleshooting.md) for solutions to common problems.
+
+## Contributing
+
+Contributions to SesoFix are welcome! Please see the [Contributing Guidelines](CONTRIBUTING.md) for more information on how to get involved.
 
 ## License
 
