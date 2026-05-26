@@ -84,14 +84,14 @@ def run_example():
 
     # Load model and tokenizer
     print("Loading model...")
-    model, tokenizer = load_byt5_model("google/byt5-small")
+    model, tokenizer = load_byt5_model("google/byt5-base")
 
     # Prepare dataset
     print("Preparing dataset...")
     tokenized_datasets = prepare_dataset(
         dataset_dict, 
         tokenizer, 
-        batch_size=2,
+        batch_size=64,
         max_input_length=64,
         max_target_length=64
     )
@@ -100,8 +100,8 @@ def run_example():
     training_args = get_training_args(
         output_dir="./models/example_model",
         num_train_epochs=5,
-        per_device_train_batch_size=2,
-        per_device_eval_batch_size=2,
+        per_device_train_batch_size=64,
+        per_device_eval_batch_size=64,
         warmup_steps=0,
         weight_decay=0.01,
         logging_dir="./logs/example_logs",
@@ -112,7 +112,6 @@ def run_example():
         load_best_model_at_end=True,
         metric_for_best_model="eval_loss",
         greater_is_better=False,
-        fp16=False,  # Set to False for CPU training
     )
 
     # Data collator

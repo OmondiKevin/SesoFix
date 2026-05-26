@@ -42,7 +42,7 @@ def parse_args():
                         help="Column name indicating if the row is synthetic (only for csv format)")
 
     # Model arguments
-    parser.add_argument("--model_name", type=str, default="google/byt5-small",
+    parser.add_argument("--model_name", type=str, default="google/byt5-base",
                         help="Pre-trained model name")
     parser.add_argument("--output_dir", type=str, default="./models",
                         help="Directory to save the model")
@@ -50,11 +50,11 @@ def parse_args():
     # Training arguments
     parser.add_argument("--num_train_epochs", type=int, default=3,
                         help="Number of training epochs")
-    parser.add_argument("--train_batch_size", type=int, default=8,
+    parser.add_argument("--train_batch_size", type=int, default=64,
                         help="Training batch size")
-    parser.add_argument("--eval_batch_size", type=int, default=8,
+    parser.add_argument("--eval_batch_size", type=int, default=64,
                         help="Evaluation batch size")
-    parser.add_argument("--gradient_accumulation_steps", type=int, default=4,
+    parser.add_argument("--gradient_accumulation_steps", type=int, default=1,
                         help="Number of updates steps to accumulate before performing a backward/update pass")
     parser.add_argument("--max_input_length", type=int, default=512,
                         help="Maximum input sequence length in bytes")

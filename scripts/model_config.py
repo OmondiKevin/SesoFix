@@ -12,7 +12,7 @@ from transformers import (
 )
 import torch
 
-def load_byt5_model(model_name="google/byt5-small", cache_dir=None):
+def load_byt5_model(model_name="google/byt5-base", cache_dir=None):
     """
     Load a pre-trained ByT5 model and tokenizer.
     
@@ -36,8 +36,8 @@ def load_byt5_model(model_name="google/byt5-small", cache_dir=None):
 def get_training_args(
     output_dir="./results",
     num_train_epochs=3,
-    per_device_train_batch_size=8,
-    per_device_eval_batch_size=8,
+    per_device_train_batch_size=64,
+    per_device_eval_batch_size=64,
     warmup_steps=500,
     weight_decay=0.01,
     logging_dir="./logs",
@@ -48,13 +48,16 @@ def get_training_args(
     load_best_model_at_end=True,
     metric_for_best_model="eval_loss",
     greater_is_better=False,
-    fp16=torch.cuda.is_available(),
+    fp16=None,
+    bf16=None,
+    tf32=None,
     gradient_accumulation_steps=1,
     label_smoothing_factor=0.0,
     lr_scheduler_type="linear",
 ):
     """
     Get training arguments for the Seq2Seq model.
+    Auto-detects and enables high-performance options (BF16, TF32) on supported hardware like A100.
     
     Args:
         Various training parameters
@@ -62,6 +65,14 @@ def get_training_args(
     Returns:
         Seq2SeqTrainingArguments object
     """
+    # Auto-detect hardware precision configurations
+    if fp16 is None:
+        fp16 = torch.cuda.is_available() and not (torch.cuda.is_available() and torch.cuda.is_bf16_supported())
+    if bf16 is None:
+        bf16 = torch.cuda.is_available() and torch.cuda.is_bf16_supported()
+    if tf32 is None:
+        tf32 = torch.cuda.is_available()
+        
     return Seq2SeqTrainingArguments(
         output_dir=output_dir,
         num_train_epochs=num_train_epochs,
@@ -78,10 +89,14 @@ def get_training_args(
         metric_for_best_model=metric_for_best_model,
         greater_is_better=greater_is_better,
         fp16=fp16,
+        bf16=bf16,
+        tf32=tf32,
         gradient_accumulation_steps=gradient_accumulation_steps,
         label_smoothing_factor=label_smoothing_factor,
         lr_scheduler_type=lr_scheduler_type,
         predict_with_generate=True,
+        dataloader_num_workers=4,
+        pin_memory=True,
     )
 
 def get_model_size_info(model):
