@@ -40,6 +40,18 @@ def create_sample_data():
             "Letsatsi lea chaba.",
             "Ke lapile haholo.",
             "Metsi a pholile."
+        ],
+        "is_synthetic": [
+            False,
+            False,
+            False,
+            False,
+            False,
+            True,
+            True,
+            True,
+            True,
+            True
         ]
     }
 
@@ -94,7 +106,7 @@ def run_example():
         weight_decay=0.01,
         logging_dir="./logs/example_logs",
         logging_steps=1,
-        evaluation_strategy="epoch",
+        eval_strategy="epoch",
         save_strategy="epoch",
         save_total_limit=1,
         load_best_model_at_end=True,
@@ -149,7 +161,7 @@ def run_example():
 
     model.eval()
     for example in test_examples:
-        inputs = tokenizer(example, return_tensors="pt", padding=True, truncation=True)
+        inputs = tokenizer(f"normalise: {example}", return_tensors="pt", padding=True, truncation=True)
         outputs = model.generate(**inputs, max_length=64)
         prediction = tokenizer.decode(outputs[0], skip_special_tokens=True)
         print(f"Input: {example}")

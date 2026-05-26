@@ -42,13 +42,16 @@ def get_training_args(
     weight_decay=0.01,
     logging_dir="./logs",
     logging_steps=100,
-    evaluation_strategy="epoch",
+    eval_strategy="epoch",
     save_strategy="epoch",
     save_total_limit=2,
     load_best_model_at_end=True,
     metric_for_best_model="eval_loss",
     greater_is_better=False,
     fp16=torch.cuda.is_available(),
+    gradient_accumulation_steps=1,
+    label_smoothing_factor=0.0,
+    lr_scheduler_type="linear",
 ):
     """
     Get training arguments for the Seq2Seq model.
@@ -68,13 +71,16 @@ def get_training_args(
         weight_decay=weight_decay,
         logging_dir=logging_dir,
         logging_steps=logging_steps,
-        evaluation_strategy=evaluation_strategy,
+        eval_strategy=eval_strategy,
         save_strategy=save_strategy,
         save_total_limit=save_total_limit,
         load_best_model_at_end=load_best_model_at_end,
         metric_for_best_model=metric_for_best_model,
         greater_is_better=greater_is_better,
         fp16=fp16,
+        gradient_accumulation_steps=gradient_accumulation_steps,
+        label_smoothing_factor=label_smoothing_factor,
+        lr_scheduler_type=lr_scheduler_type,
         predict_with_generate=True,
     )
 

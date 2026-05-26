@@ -118,7 +118,7 @@ The codebase is organized into the following main components:
 
 1. **data_preprocessing.py**: Functions for loading and preprocessing data
 2. **model_config.py**: Functions for loading and configuring the ByT5 model
-3. **train.py**: Script for fine-tuning the model
+3. **train_model.py**: Script for fine-tuning the model
 4. **evaluate.py**: Script for evaluating the model and generating predictions
 5. **example.py**: Example script demonstrating the complete pipeline
 

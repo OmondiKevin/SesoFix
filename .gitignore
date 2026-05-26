@@ -33,6 +33,7 @@ data/
 *.csv
 *.txt
 !requirements.txt
+!seso_fix_*.txt
 
 # IDE files
 .idea/
@@ -72,6 +73,3 @@ temp/*
 !cache/.gitkeep
 !temp/.gitkeep
 
-# Ignore contents of scripts folder except train_model.py
-scripts/*
-!scripts/train_model.py
