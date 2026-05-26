@@ -38,6 +38,8 @@ def parse_args():
                         help="Column name for South African Sesotho text (only for csv format)")
     parser.add_argument("--ls_col", type=str, default="lesotho",
                         help="Column name for Lesotho Sesotho text (only for csv format)")
+    parser.add_argument("--synthetic_col", type=str, default="is_synthetic",
+                        help="Column name indicating if the row is synthetic (only for csv format)")
 
     # Model arguments
     parser.add_argument("--model_name", type=str, default="google/byt5-small",
@@ -52,20 +54,34 @@ def parse_args():
                         help="Training batch size")
     parser.add_argument("--eval_batch_size", type=int, default=8,
                         help="Evaluation batch size")
-    parser.add_argument("--max_input_length", type=int, default=128,
-                        help="Maximum input sequence length")
-    parser.add_argument("--max_target_length", type=int, default=128,
-                        help="Maximum target sequence length")
-    parser.add_argument("--learning_rate", type=float, default=5e-5,
+    parser.add_argument("--gradient_accumulation_steps", type=int, default=4,
+                        help="Number of updates steps to accumulate before performing a backward/update pass")
+    parser.add_argument("--max_input_length", type=int, default=512,
+                        help="Maximum input sequence length in bytes")
+    parser.add_argument("--max_target_length", type=int, default=512,
+                        help="Maximum target sequence length in bytes")
+    parser.add_argument("--learning_rate", type=float, default=5e-4,
                         help="Learning rate")
+    parser.add_argument("--label_smoothing", type=float, default=0.1,
+                        help="Label smoothing factor")
+    parser.add_argument("--lr_scheduler_type", type=str, default="cosine",
+                        help="Learning rate scheduler type (linear, cosine, etc.)")
+    parser.add_argument("--warmup_steps", type=int, default=500,
+                        help="Linear warmup over these steps")
     parser.add_argument("--early_stopping_patience", type=int, default=3,
                         help="Early stopping patience")
+    parser.add_argument("--dry-run", action="store_true",
+                        help="Run script in dry-run mode (for CI/CD test)")
 
     return parser.parse_args()
 
 def main():
     """Main training function."""
     args = parse_args()
+
+    if args.dry_run:
+        logger.info("[DRY RUN] Skipping training. Arguments parsed and script structure valid.")
+        sys.exit(0)
 
     # Load data
     logger.info("Loading data...")
@@ -78,7 +94,8 @@ def main():
 
     # Split dataset
     logger.info("Splitting dataset...")
-    dataset_dict = split_dataset(dataset, train_ratio=0.8, val_ratio=0.1, test_ratio=0.1)
+    synthetic_col = args.synthetic_col if args.data_format == "csv" else None
+    dataset_dict = split_dataset(dataset, train_ratio=0.8, val_ratio=0.1, test_ratio=0.1, synthetic_col=synthetic_col)
 
     # Print dataset statistics
     logger.info(f"Dataset sizes:")
@@ -113,17 +130,20 @@ def main():
         num_train_epochs=args.num_train_epochs,
         per_device_train_batch_size=args.train_batch_size,
         per_device_eval_batch_size=args.eval_batch_size,
-        warmup_steps=0,
+        warmup_steps=args.warmup_steps,
         weight_decay=0.01,
         logging_dir="./logs",
         logging_steps=100,
-        evaluation_strategy="epoch",
+        eval_strategy="epoch",
         save_strategy="epoch",
         save_total_limit=2,
         load_best_model_at_end=True,
-        metric_for_best_model="eval_loss",
-        greater_is_better=False,
+        metric_for_best_model="eval_bleu",
+        greater_is_better=True,
         fp16=torch.cuda.is_available(),
+        gradient_accumulation_steps=args.gradient_accumulation_steps,
+        label_smoothing_factor=args.label_smoothing,
+        lr_scheduler_type=args.lr_scheduler_type,
     )
 
     # Data collator
@@ -134,6 +154,48 @@ def main():
         max_length=args.max_input_length
     )
 
+    # Metrics evaluation function
+    import numpy as np
+    import sys
+    import os
+    try:
+        # Prevent local scripts directory from shadowing the third-party 'evaluate' package
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        original_sys_path = list(sys.path)
+        sys.path = [p for p in sys.path if os.path.abspath(p) != current_dir]
+        import evaluate
+        sys.path = original_sys_path
+        
+        bleu_metric = evaluate.load("bleu")
+    except Exception as e:
+        logger.warning(f"Could not load bleu metric via evaluate: {e}. Falling back to basic metrics.")
+        bleu_metric = None
+
+    def compute_metrics(eval_preds):
+        preds, labels = eval_preds
+        if isinstance(preds, tuple):
+            preds = preds[0]
+        
+        # Replace -100 in labels as we can't decode them
+        labels = np.where(labels != -100, labels, tokenizer.pad_token_id)
+        
+        decoded_preds = tokenizer.batch_decode(preds, skip_special_tokens=True)
+        decoded_labels = tokenizer.batch_decode(labels, skip_special_tokens=True)
+        
+        decoded_preds = [pred.strip() for pred in decoded_preds]
+        decoded_labels = [[label.strip()] for label in decoded_labels]
+        
+        if bleu_metric is not None:
+            try:
+                bleu_results = bleu_metric.compute(predictions=decoded_preds, references=decoded_labels)
+                return {"bleu": bleu_results["bleu"]}
+            except Exception as e:
+                logger.error(f"Error computing BLEU metric: {e}")
+        
+        # Fallback exact match metric
+        exact_match = sum(1 for p, r in zip(decoded_preds, decoded_labels) if p == r[0]) / max(len(decoded_preds), 1)
+        return {"bleu": exact_match} # Use EM as a proxy if BLEU load fails
+
     # Initialize trainer
     trainer = Seq2SeqTrainer(
         model=model,
@@ -142,6 +204,7 @@ def main():
         eval_dataset=tokenized_datasets["validation"],
         tokenizer=tokenizer,
         data_collator=data_collator,
+        compute_metrics=compute_metrics,
         callbacks=[EarlyStoppingCallback(early_stopping_patience=args.early_stopping_patience)]
     )
 

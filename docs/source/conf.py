@@ -10,9 +10,9 @@ sys.path.insert(0, os.path.abspath('../..'))
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'SesoFix'
-copyright = '2023, Author'
-author = 'Author'
+project = 'SesoFix: Orthographic Harmonization in Sesotho Using a Byte-Level Sequence-to-Sequence Approach'
+copyright = '2025, Author'
+author = 'Kevin Omondi and Lebohang Nkale'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration

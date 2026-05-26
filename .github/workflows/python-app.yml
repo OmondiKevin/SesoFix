@@ -36,3 +36,9 @@ jobs:
     - name: Run evaluation script
       run: |
         python scripts/evaluate.py --test-mode
+
+    - name: Run training script (dry test)
+      run: |
+        echo "Running train_model.py with dry-run..."
+        python scripts/train_model.py --dry-run
+
