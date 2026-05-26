@@ -1,6 +1,6 @@
 # SesoFix Documentation
 
-Welcome to the SesoFix documentation. This documentation provides comprehensive information about the SesoFix project, which fine-tunes a ByT5 model to convert South African Sesotho orthography to Lesotho Sesotho orthography.
+Welcome to the SesoFix documentation. This documentation provides comprehensive information about the SesoFix project, which fine-tunes a byte-level sequence-to-sequence model (ByT5) to harmonize South African and Lesotho Sesotho orthographies.
 
 ## Documentation Contents
 

@@ -1,10 +1,10 @@
 Welcome to SesoFix's documentation!
 ==================================
 
-SesoFix: Sesotho Orthography Conversion
----------------------------------------
+SesoFix: Orthographic Harmonization in Sesotho
+----------------------------------------------
 
-This project fine-tunes a ByT5 model to convert South African Sesotho orthography to Lesotho Sesotho orthography. The model is trained to take South African Sesotho text as input and produce the corrected Lesotho Sesotho equivalent as output.
+This project fine-tunes a byte-level sequence-to-sequence model (ByT5) to harmonize South African and Lesotho Sesotho orthographies. The model automatically converts South African Sesotho text into its standardized Lesotho variant, bridging regional spelling splits to enable downstream NLP interoperability.
 
 .. toctree::
    :maxdepth: 2
