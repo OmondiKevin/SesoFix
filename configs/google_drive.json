@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "last_verified": "2026-08-14",
+  "project_root": {
+    "id": "1jC_13ekMXzxu1cKEbRlqXoA7jdV_-6VI",
+    "name": "SesoFix",
+    "url": "https://drive.google.com/drive/folders/1jC_13ekMXzxu1cKEbRlqXoA7jdV_-6VI",
+    "owner_account": "kevochi09@gmail.com",
+    "local_mount": "/Users/komondi/Library/CloudStorage/GoogleDrive-kevochi09@gmail.com/My Drive/SesoFix"
+  },
+  "active_research_root": {
+    "id": "1gGXJrLpt2FDGLgxePkrjx_PpZefJf1O3",
+    "name": "00 Current Research",
+    "url": "https://drive.google.com/drive/folders/1gGXJrLpt2FDGLgxePkrjx_PpZefJf1O3"
+  },
+  "folders": {
+    "project_control": "1EZwbz4Z0FvG3pcylv5nkMKk4njNBWo6o",
+    "annotation": "17wuynk16X2fVmTegRWEbRf6dgHz4gtb_",
+    "annotation_pilot_v1": "1i9uVrscTWwuMQysDvipquzImn9K3kFEg",
+    "annotation_primary": "12cmAQzL5Vw-gHmT7PBmvX_Ba32iL8CK3",
+    "annotation_independent_review": "1VeY1qQklFzziwbJ7_8HIbhOwT93KQOkP",
+    "annotation_returned_completed": "1i9rqtlYrAAd74--r-QSx4kyWwooUKwUe",
+    "annotation_adjudication": "1qhy5zmQewmfxmd-TlkOQ6UN2ShJZtO3F",
+    "experiments": "1Kq2j34de14IzXJ0mFhLzjgR2p3_m9xf3",
+    "paper": "1K4uXvlGjJuTSEBunkPh1785c5CVWe3oH"
+  },
+  "pilot_v1": {
+    "primary_sheet": {
+      "id": "1fmK-hxu5vMmd9aYb77MscDcRD1C_kWtn_Z3v1xZcFBQ",
+      "url": "https://docs.google.com/spreadsheets/d/1fmK-hxu5vMmd9aYb77MscDcRD1C_kWtn_Z3v1xZcFBQ/edit",
+      "source_xlsx_sha256": "4bc8bd4a45b3cd784d136546677c5559130cf260be3cec6503ef552ca3cd8ae0"
+    },
+    "independent_review_sheet": {
+      "id": "1j-nfWo7zec04SjFR_s8616n8e3ERkrcIo14jH5vQW7I",
+      "url": "https://docs.google.com/spreadsheets/d/1j-nfWo7zec04SjFR_s8616n8e3ERkrcIo14jH5vQW7I/edit",
+      "source_xlsx_sha256": "b0ad5a541a76bd5e657071e3ace553eabcf136f4710cb7466034faa380271e57"
+    }
+  },
+  "control_files": {
+    "workplan": "1uXo505r8j39_zCxwqJJkz7TWTOZIvryl",
+    "pilot_package": "1YrI2lbuhuFCe1W1h6LClxJAtjU-s8upQ",
+    "annotation_protocol": "14lCHzv_01mRo1HP4nSq0aVURyztM9LYO",
+    "paper_outline": "1nnW9mABbx6GGSDBE3dnAvFO28F9HyO1t",
+    "google_drive_workflow": "1DjJqMpSMWpzZOYe97viBYc-EDNlPLH7G",
+    "drive_config": "1SDBXQQUEobyVxNk8kN2vanKaM62E5zSx"
+  },
+  "sync_policy": {
+    "preserve_existing_root_items": true,
+    "delete_existing_drive_items": false,
+    "update_control_files_by_id": true,
+    "annotation_returns_are_append_only": true,
+    "share_file_specific_links_not_project_root": true,
+    "local_mount_is_a_mirror_not_the_canonical_git_repository": true
+  },
+  "permission_warning": "The project root currently grants anyone with the link writer access. Folder separation supports workflow organization but does not cryptographically enforce blind review."
+}

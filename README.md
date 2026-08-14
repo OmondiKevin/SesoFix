@@ -1,140 +1,97 @@
-# SesoFix: Orthographic Harmonization in Sesotho
+# SesoFix
 
-SesoFix is an orthographic harmonization framework designed to convert South African Sesotho text into the standardized Lesotho Sesotho variant. By resolving regional spelling and morphological discrepancies, SesoFix bridges the orthographic split that fragments low-resource Sesotho corpora, improving downstream natural language processing (NLP) performance.
+SesoFix is a research project on **cross-standard adaptation from South African
+Sesotho to Lesotho Sesotho**. It asks how much human supervision is needed to
+adapt internationalized text to the intended written standard and whether that
+adaptation improves downstream semantic parsing.
 
-SesoFix fine-tunes a byte-level pre-trained transformer (**ByT5**) in a sequence-to-sequence framework, outperforming traditional rule-based converters and subword-level multilingual models (**mT5**).
+Both written standards are treated as legitimate. The task is adaptation, not
+correction of an inferior variety.
 
----
+## Current evidence
 
-## Key Features
+- Common Voice 26.0 provides 2,339 validated South African Sesotho sentences and
+  14,837 additional pending sentences.
+- All 2,337 legacy workbook sources match the current validated corpus exactly by
+  ID and text.
+- One bidialectal collaborator supplied 74 Lesotho Sesotho targets: 51 direct
+  changed targets and 23 formula-copied no-change targets.
+- Those 74 examples were exposed during rule development and remain
+  development-only.
+- No publishable model comparison, human evaluation, or downstream result exists
+  yet. All older numerical claims are archived as unverified legacy material.
 
-* **Byte-Level Sequence-to-Sequence Modeling**: Utilizes Google's ByT5 model, which operates directly on UTF-8 bytes to prevent subword tokenization fragmentation on regional spelling variations.
-* **Leakage-Prevention Splitting**: Automatically isolates rule-based synthetic data strictly to the training set, keeping validation and test splits 100% clean and composed of real-world text.
-* **Baselines Included**: Contains implementations for Identity Copy, regular expression Rule-Based systems, character-level LSTMs with attention, and Edit-Distance retrieval.
-* **Downstream Integration**: Verified to improve downstream Sesotho-to-English translation quality.
+## Current phase
 
----
+The archive and lossless merge are frozen. A deterministic 200-sentence pilot is
+ready for blind human annotation from the new pending pool:
 
-## Project Structure
+- 150 probability-sampled items for prevalence and source-quality estimates;
+- 15 short-sentence coverage items;
+- 15 downvoted-sentence coverage items; and
+- 20 non-government-source coverage items.
 
-```
+The primary collaborator and an independent Lesotho reviewer receive separate,
+blinded workbooks. Pilot results will determine the final annotation workload
+and benchmark size.
+
+See the [pilot package](docs/PILOT_PACKAGE.md) for the handoff and quality checks,
+and [WORKPLAN.md](WORKPLAN.md) for completed and pending tasks.
+
+## Research design
+
+1. **Intrinsic adaptation benchmark:** identity, frozen rules, translation pivot,
+   zero-shot/few-shot language models, retrieval/edit templates, ByT5, and mT5
+   across a supervision curve.
+2. **Downstream internationalization:** a human South African/Lesotho Sesotho
+   MASSIVE test subset measuring intent accuracy, slot F1, and frame exact match.
+
+Authoritative documents:
+
+- [Research protocol](docs/RESEARCH_PROTOCOL.md)
+- [Common Voice release profile](docs/COMMON_VOICE_RELEASE_26_PROFILE.md)
+- [Common Voice merge protocol](docs/COMMON_VOICE_REFRESH.md)
+- [Annotation protocol](docs/ANNOTATION_PROTOCOL.md)
+- [Pilot package](docs/PILOT_PACKAGE.md)
+- [Google Drive workflow](docs/GOOGLE_DRIVE_WORKFLOW.md)
+- [Dataset provenance](docs/DATA_PROVENANCE.md)
+- [Evidence audit](docs/REPRODUCIBILITY_STATUS.md)
+- [Paper outline](paper/PAPER_OUTLINE.md)
+
+## Execution boundary
+
+**No model training is run locally.** Local work is limited to inventory,
+checksums, lossless merging, deterministic sampling, annotation QA, metrics,
+tests, and preparing Colab notebooks. All supervised training will run in Google
+Colab after evaluation manifests are frozen.
+
+## Repository layout
+
+```text
 SesoFix/
-├── data/
-│   ├── processed/     # Processed data splits (sample_data.csv)
-│   ├── input/         # Raw source/target files
-│   └── output/        # Generated model predictions
-├── models/            # Saved model weights
-├── logs/              # Tensorboard training logs
-├── checkpoints/       # Training checkpoint saves
-├── scripts/
-│   ├── __init__.py
-│   ├── data_preprocessing.py  # Data loading, tokenization, and leakage-prevention splitting
-│   ├── model_config.py        # ByT5/mT5 configurations and parameter counters
-│   ├── train_model.py         # Seq2Seq fine-tuning script
-│   └── evaluate.py            # Automatic metrics evaluation (BLEU, chrF++, CED, WER)
-├── __init__.py
-├── example.py         # Demonstration script (runs end-to-end on sample data)
-├── requirements.txt   # Core project dependencies
-├── run_example.sh     # Shell runner script for Unix/Mac
-└── run_example.bat    # Batch runner script for Windows
+├── configs/          # Protocol configuration; not executed-result evidence
+├── data/             # Tracked metadata/manifests; raw text remains ignored
+├── docs/             # Active protocol, provenance, and audit documents
+├── notebooks/legacy/ # Unverified prior notebook, retained for history
+├── paper/            # Active paper outline and clearly separated legacy work
+├── results/          # Result acceptance policy; no confirmatory results yet
+├── scripts/          # Data preparation and diagnostic commands
+├── src/sesofix/      # Tested data, metric, rule, and sampling modules
+└── tests/            # Engineering tests; not linguistic validation
 ```
 
----
+## Local checks
 
-## Installation
-
-1. **Clone the repository**:
-   ```bash
-   git clone https://github.com/OmondiKevin/SesoFix.git
-   cd SesoFix
-   ```
-
-2. **Set up environment**:
-   Using the Makefile:
-   ```bash
-   make setup  # Creates virtual environment and installs dependencies
-   ```
-   Or manually:
-   ```bash
-   python3 -m venv venv
-   source venv/bin/activate
-   pip install -r requirements.txt
-   ```
-
----
-
-## Usage
-
-### 1. Fine-Tuning
-To fine-tune a model, use `scripts/train_model.py`. The model size, epochs, and data splits are configurable via CLI arguments.
-
-**Important (Leakage Prevention)**: If your CSV contains synthetic training data, pass the `--synthetic_col` argument to ensure synthetic data is strictly isolated to the training set:
 ```bash
-# Using a CSV with a column 'is_synthetic' to prevent test set contamination
-python3 scripts/train_model.py \
-  --data_format csv \
-  --sa_file data/processed/data.csv \
-  --sa_col south_african \
-  --ls_col lesotho \
-  --synthetic_col is_synthetic \
-  --model_name "google/byt5-small" \
-  --num_train_epochs 5 \
-  --output_dir ./models/byt5_harmonizer
+python3 -m venv .venv
+.venv/bin/pip install -r requirements.txt
+make test
 ```
 
-Additional parameters:
-* `--model_name`: Pre-trained Hugging Face model checkpoint (e.g., `google/byt5-small`, `google/mt5-small`).
-* `--learning_rate`: Training learning rate (default: `5e-4`).
-* `--synthetic_col`: Column indicating if a row is synthetic (default: `"is_synthetic"`). Set to `None` or omit if no synthetic data exists.
+`make train` intentionally fails: training is Colab-only.
 
-### 2. Evaluation
-To run evaluation and save predictions, use `scripts/evaluate.py`:
-```bash
-python3 scripts/evaluate.py \
-  --data_format csv \
-  --sa_file data/processed/test_data.csv \
-  --sa_col south_african \
-  --ls_col lesotho \
-  --model_dir ./models/byt5_harmonizer \
-  --output_file data/output/predictions.csv
-```
-This script computes:
-* **BLEU score** (via SacreBLEU)
-* **chrF++** (character n-grams)
-* **Mean Character Edit Distance (CED)**
-* **Word Error Rate (WER)**
-* **Exact Match** rate
+## Licensing
 
----
-
-## Main Evaluation Results (Clean Test Set)
-
-Models evaluated on the clean validation/test splits (composed strictly of manual and web-crawled text, with 0% synthetic data):
-
-| System | BLEU ↑ | chrF++ ↑ | CED ↓ | Norm. CED (%) | WER ↓ |
-|---|---|---|---|---|---|
-| Identity Copy | 76.2 | 88.4 | 4.71 | 5.3% | 12.8% |
-| Edit-Distance Retrieval | 79.8 | 89.7 | 3.52 | 4.0% | 9.1% |
-| Rule-Based Baseline | 84.3 | 92.1 | 2.89 | 3.2% | 7.4% |
-| LSTM Seq2Seq (scratch) | 86.7 | 93.2 | 2.34 | 2.6% | 5.9% |
-| **mT5-Small** (subword) | 85.8 | 91.9 | 2.67 | 3.0% | 6.8% |
-| **ByT5-Small** (ours) | **89.2** | **94.1** | **1.78** | **2.0%** | **4.2%** |
-| **ByT5-Base** (ours) | **89.9** | **94.5** | **1.62** | **1.8%** | **3.8%** |
-
----
-
-## Verification and Example Run
-
-Run the end-to-end sample pipeline to verify that your environment is configured correctly:
-```bash
-make example  # On Linux/Mac
-./run_example.sh  # Or run shell script
-```
-The script will generate a sample CSV, split the dataset using leakage-prevention (isolating synthetic rows to the training split), fine-tune a small model, and run inference examples showing output mappings.
-
----
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
- SesoCorp dataset and rules are released under the Creative Commons BY-SA 4.0 license.
+Code is covered by [LICENSE](LICENSE). Third-party dataset and collaborator
+annotation rights are recorded separately in `data/DATA_MANIFEST.csv`; the
+project does not assert one blanket license over all research data.

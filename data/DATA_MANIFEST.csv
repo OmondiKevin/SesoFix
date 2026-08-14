@@ -1,0 +1,18 @@
+dataset_id,original_filename,source_provider,language_variant,parallel_type,row_count_approx,size_bytes_approx,license,intended_role,status
+DS01_AUTSHUMATO,Autshumato.BilingualCorpus(English-Sesotho).v2.0.zip,CTexT / SADiLaR,st_ZA / en_ZA,Parallel (English <-> SA Sesotho),171292,37286819,CC-BY-NC-SA 4.0,Raw SA Monolingual Source & Downstream MT Evaluation,ACTIVE_RAW_LOCAL
+DS02_NCHLT_ST,st.zip,NCHLT / SADiLaR,st_ZA,Monolingual (SA Sesotho),148390,12730000,CC-BY-NC-SA 4.0,Raw SA Monolingual Source for Synthetic Generation,ACTIVE_RAW_LOCAL
+DS03_CV_LEGACY,Southern Sesotho Sentence Verification.xlsx,Mozilla Common Voice source / one bidialectal collaborator,st_ZA / st_LS,Partially parallel (74 single-annotator targets / 2263 SA only),2337,284325,Common Voice source CC0; collaborator-target release terms not yet documented,Development-only legacy seed and annotation-pool lineage,ACTIVE_RAW_LOCAL_CONTAMINATED_FOR_RULE_DEV
+DS17_CV_REFRESH,1781705124250-cv-corpus-26.0-2026-06-12-st.tar.gz,Mozilla Common Voice,st_ZA corpus provenance; release locale st,Monolingual source sentences (2339 validated / 14837 pending),17176,4978154,CC0 subject to bundled release terms,Lossless refresh and fresh human-annotation candidate pool,ACTIVE_LOCAL_RELEASE_26_HASHED
+DS04_CUSTOM_DICT,customdictionary.govu.2012-11-21.st.txt (1).zip,Gov.za / SADiLaR,st_ZA,Monolingual Lexicon (Wordlist),3300,30485,Public Domain / Gov,Spelling & Vocabulary Validation,ACTIVE_RAW_LOCAL
+DS05_LWAZI_DICT,lwazi_ii_sesotho_pronunciation_dictionary.zip,CSIR / SADiLaR,st_ZA,Grapheme-to-Phoneme Pronunciation Dictionary,9500,456402,Apache 2.0,Phonetic Reference,ARCHIVED_LOCAL
+DS06_SYLLABIFIER,sesotho_syllabifier-main.zip,GitHub / SADiLaR,st_ZA,Python Syllabification Tool,0,32677,MIT,Morphological Reference Tool,ARCHIVED_LOCAL
+DS07_SYLLABLE_WORDS,sesotho_syllable_wordlist-main.zip,GitHub / SADiLaR,st_ZA,Monolingual Syllable Wordlist,25000,269631,MIT,Syllable Validation,ARCHIVED_LOCAL
+DS08_AST_SPEECH,AST Sesotho-Sesotho,African Speech Technology,st_ZA,Speech Audio + X-SAMPA Transcriptions,0,2000000,Academic,ASR Speech (Irrelevant for Text NLP),PURGED_NOISE
+DS09_SADE_NAMES,sade_name_corpus.zip,SADE / SADiLaR,Multilingual ZA,Audio Recordings (WAV),32000,518090368,Academic,Acoustic Names (Irrelevant for Text NLP),PURGED_NOISE
+DS10_SESO_TONE,Sesotho_Tone.zip,SADiLaR,st_ZA,Praat Pitch Tracks,0,62289743,Academic,Acoustic Tone (Irrelevant for Text NLP),PURGED_NOISE
+DS11_SESO_VOWELS,Sesotho_Vowels.zip,SADiLaR,st_ZA,Praat Formant Tracks,0,50729723,Academic,Acoustic Vowels (Irrelevant for Text NLP),PURGED_NOISE
+DS12_SESO_FUNWORDS,Sesotho_Function_Words.zip,SADiLaR,st_ZA,Praat Function Word Tracks,0,71814166,Academic,Acoustic Pitch (Irrelevant for Text NLP),PURGED_NOISE
+DS13_WOEFZELA_APK,nchlt.speech.woefzela.8.0.zip,NCHLT / CSIR,N/A,Android APK Data Collection App,0,1110796,Academic,Mobile App (Irrelevant for Text NLP),PURGED_NOISE
+DS14_ACADEMIC_WORDS,Generic Multilingual Academic Wordlists with Definitions.zip,SADiLaR,tn / xh / nso / ss / ve,Multilingual Wordlists (Non-Sesotho),0,10991028,Academic,Non-Sesotho Wordlists,PURGED_NOISE
+DS15_DUPLICATE_DROP,Sesotho Datasets 2/Sesotho Datasets/,N/A,st_ZA,Duplicate Directory,0,600000000,N/A,Nested Duplicate Archive,PURGED_NOISE
+DS16_OLD_REPO_ZIP,SesoFix-main.zip,GitHub,st_ZA,Stale Repository Snapshot,0,217395,MIT,Outdated Snapshot,PURGED_NOISE

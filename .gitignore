@@ -1,75 +1,53 @@
-# Python
+# Python and local environments
 __pycache__/
 *.py[cod]
-*$py.class
-*.so
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-
-# Virtual Environment
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
 venv/
-env/
-ENV/
+*.egg-info/
+build/
+dist/
 
-# Model and data files
-results/
-example_model/
-example_logs/
-data/
-*.csv
-*.txt
-!requirements.txt
-!seso_fix_*.txt
-
-# IDE files
+# Editors and operating systems
+.DS_Store
 .idea/
 .vscode/
 *.swp
 *.swo
-.DS_Store
+Thumbs.db
 
-# Ignore all contents in these folders
-data/input/*
-data/output/*
-data/processed/*
+# Raw, intermediate, annotated, and model-ready data
+data/incoming/
+data/raw/
+data/interim/
+data/processed/
+data/annotations/
+data/annotation_packages/
+datasets_local/
+Sesotho Datasets/
+Sesotho Datasets 2/
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.xlsx
 
-# But keep the .gitkeep files
-!data/input/.gitkeep
-!data/output/.gitkeep
-!data/processed/.gitkeep
+# Local annotation workbooks and generated artifacts
+outputs/
+runs/
+logs/
+models/
+checkpoints/
+cache/
+temp/
+*.pt
+*.bin
+*.safetensors
+*.tfevents.*
+events.out.tfevents.*
 
-
-# Ignore contents of data folders
-data/input/*
-data/output/*
-data/processed/*
-!data/input/.gitkeep
-!data/output/.gitkeep
-!data/processed/.gitkeep
-
-# Ignore contents of models, logs, checkpoints, cache, and temp folders
-models/*
-logs/*
-checkpoints/*
-cache/*
-temp/*
-!models/.gitkeep
-!logs/.gitkeep
-!checkpoints/.gitkeep
-!cache/.gitkeep
-!temp/.gitkeep
-
+# Result directories contain summaries only until immutable run artifacts exist
+results/*
+!results/README.md

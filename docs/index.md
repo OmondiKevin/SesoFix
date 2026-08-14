@@ -1,42 +1,17 @@
-# SesoFix Documentation
+# Active documentation
 
-Welcome to the SesoFix documentation. This documentation provides comprehensive information about the SesoFix project, which fine-tunes a byte-level sequence-to-sequence model (ByT5) to harmonize South African and Lesotho Sesotho orthographies.
+- [Research protocol](RESEARCH_PROTOCOL.md)
+- [Common Voice 26.0 profile](COMMON_VOICE_RELEASE_26_PROFILE.md)
+- [Common Voice refresh and merge](COMMON_VOICE_REFRESH.md)
+- [Human annotation and adjudication](ANNOTATION_PROTOCOL.md)
+- [Annotation pilot package](PILOT_PACKAGE.md)
+- [Google Drive workflow](GOOGLE_DRIVE_WORKFLOW.md)
+- [Dataset provenance](DATA_PROVENANCE.md)
+- [Claim-versus-evidence audit](REPRODUCIBILITY_STATUS.md)
+- [Exploratory orthography notes](orthography_differences.md)
+- [Project workplan](../WORKPLAN.md)
+- [Paper outline](../paper/PAPER_OUTLINE.md)
 
-## Documentation Contents
-
-### Core Documentation
-
-- [**User Guide**](user_guide.md): Step-by-step instructions for using the SesoFix pipeline
-- [**Technical Documentation**](technical.md): Detailed information about the model architecture and implementation
-- [**Orthography Differences**](orthography_differences.md): Explanation of the differences between South African and Lesotho Sesotho orthography
-- [**Troubleshooting Guide**](troubleshooting.md): Solutions to common issues
-
-### Additional Resources
-
-- [**Contributing Guidelines**](../CONTRIBUTING.md): Information on how to contribute to the project
-- [**README**](../README.md): Project overview and basic usage information
-- [**License**](../LICENSE): Project license information
-
-## Quick Start
-
-If you're new to SesoFix, we recommend starting with the [User Guide](user_guide.md), which provides step-by-step instructions for using the pipeline.
-
-If you're interested in the technical details of the project, check out the [Technical Documentation](technical.md).
-
-If you want to understand the linguistic aspects of the project, see the [Orthography Differences](orthography_differences.md) documentation.
-
-## Project Structure
-
-The SesoFix project consists of the following main components:
-
-1. **Data Preprocessing**: Functions for loading and preprocessing data
-2. **Model Configuration**: Functions for loading and configuring the ByT5 model
-3. **Training**: Script for fine-tuning the model
-4. **Evaluation**: Script for evaluating the model and generating predictions
-5. **Example**: Example script demonstrating the complete pipeline
-
-## Getting Help
-
-If you encounter any issues while using SesoFix, please refer to the [Troubleshooting Guide](troubleshooting.md).
-
-If you can't find a solution to your problem, please [create an issue](https://github.com/yourusername/SesoFix/issues) on GitHub.
+Generated Sphinx pages and the obsolete prototype user/training guides were
+removed. Historical manuscript and notebook materials remain only under
+`paper/legacy/` and `notebooks/legacy/`.

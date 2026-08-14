@@ -1,0 +1,12 @@
+{
+  "algorithm_version": "pilot_v1_natural150_coverage50",
+  "row_count": 200,
+  "seed": 42,
+  "strata": {
+    "coverage_downvoted": 15,
+    "coverage_non_gov_source": 20,
+    "coverage_short": 15,
+    "natural_random": 150
+  },
+  "unique_sentence_ids": 200
+}
