@@ -1,5 +1,10 @@
 # Sesotho Orthography Differences
 
+> **Exploratory linguistic notes.** The examples below are candidate patterns,
+> not an independently reviewed prescriptive standard or a verified rule list.
+> They must be checked by the primary collaborator and an independent Lesotho
+> Sesotho reviewer before publication or rule freezing.
+
 This document explains the key orthographic differences between South African Sesotho and Lesotho Sesotho, which are the focus of the SesoFix conversion tool.
 
 ## Background

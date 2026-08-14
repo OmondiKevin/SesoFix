@@ -1,0 +1,85 @@
+{
+  "project_name": "SesoFix",
+  "protocol_status": "pilot_annotation_ready",
+  "task": "cross_standard_adaptation",
+  "direction": "south_african_sesotho_to_lesotho_sesotho",
+  "source_standard_label": "st_ZA",
+  "target_standard_label": "st_LS",
+  "execution_policy": {
+    "local_allowed": [
+      "inventory",
+      "hashing",
+      "lossless_merge",
+      "sampling",
+      "annotation_qa",
+      "deterministic_unit_tests",
+      "notebook_preparation"
+    ],
+    "training_environment": "google_colab_only",
+    "local_model_training_allowed": false
+  },
+  "data": {
+    "legacy_workbook": "data/raw/common_voice_verification/Southern_Sesotho_Sentence_Verification.xlsx",
+    "legacy_reference_count": 74,
+    "legacy_role": "development_only",
+    "legacy_exposed_to_rule_development": true,
+    "fresh_common_voice_archive": "data/incoming/common_voice/cv-corpus-26.0-2026-06-12/1781705124250-cv-corpus-26.0-2026-06-12-st.tar.gz",
+    "fresh_common_voice_archive_sha256": "4c1863e94979c75a4dec3f6b479a5f9742b9af9b4b9e063f2d86e89d1eec6436",
+    "fresh_release": "cv-corpus-26.0-2026-06-12",
+    "validated_source_sentences": 2339,
+    "pending_candidate_sentences": 14837,
+    "legacy_exact_id_and_text_matches": 2337,
+    "pilot_manifest": "data/manifests/pilot_v1_manifest.csv",
+    "pilot_manifest_status": "frozen",
+    "final_split_manifest_status": "not_frozen",
+    "planned_counts_subject_to_profile": {
+      "train": 1000,
+      "development": 250,
+      "natural_test": 500,
+      "challenge_test": 250
+    }
+  },
+  "annotation": {
+    "human_gold_only": true,
+    "independent_review_all_development_and_test": true,
+    "independent_review_training_fraction_min": 0.25,
+    "adjudication_required_for_test_disagreements": true,
+    "pilot": {
+      "role": "development_only",
+      "total": 200,
+      "natural_random": 150,
+      "coverage_short": 15,
+      "coverage_downvoted": 15,
+      "coverage_non_gov_source": 20,
+      "seed": 42,
+      "primary_and_reviewer_blinded": true
+    }
+  },
+  "supervision_curve": [0, "few_shot", 50, 100, 250, 500, 1000, "all"],
+  "system_families": [
+    "identity",
+    "frozen_rules",
+    "machine_translation_pivot",
+    "closed_llm_zero_shot",
+    "closed_llm_few_shot",
+    "open_llm_zero_or_few_shot",
+    "retrieval_or_edit_template",
+    "byt5_supervised_colab",
+    "mt5_supervised_colab"
+  ],
+  "primary_metrics": [
+    "exact_match",
+    "chrfpp_word_order_2",
+    "corpus_character_error_rate",
+    "changed_sentence_exact_match",
+    "no_change_preservation_accuracy",
+    "unnecessary_change_rate",
+    "missed_change_rate"
+  ],
+  "downstream_study": {
+    "dataset": "Amazon MASSIVE",
+    "status": "planned_after_intrinsic_benchmark",
+    "metrics": ["intent_accuracy", "slot_f1", "frame_exact_match", "slot_value_preservation"]
+  },
+  "random_seed_registry": [13, 42, 101]
+}

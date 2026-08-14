@@ -1,0 +1,25 @@
+{
+  "protocol": "lossless_common_voice_refresh_v1",
+  "release": "cv-corpus-26.0-2026-06-12",
+  "archive_filename": "1781705124250-cv-corpus-26.0-2026-06-12-st.tar.gz",
+  "archive_sha256": "4c1863e94979c75a4dec3f6b479a5f9742b9af9b4b9e063f2d86e89d1eec6436",
+  "legacy_workbook_filename": "Southern_Sesotho_Sentence_Verification.xlsx",
+  "legacy_workbook_sha256": "17b6c0b9a9ac58a20330ca3122ac31e4e03149c657f586baaedd384ba935308c",
+  "canonical_sentence_records": 17176,
+  "duplicate_clusters": 17176,
+  "legacy_source_rows": 2337,
+  "legacy_exact_matches": 2337,
+  "legacy_human_reference_rows": 74,
+  "legacy_human_reference_exact_matches": 74,
+  "ambiguous_matches": 0,
+  "unmatched_legacy_rows": 0,
+  "automatic_fuzzy_matches": 0,
+  "training_performed": false,
+  "private_merge_directory": "data/interim/common_voice/cv-corpus-26.0-2026-06-12/merge_v1",
+  "private_artifact_sha256": {
+    "fresh_sentence_inventory.csv": "72c00e8b4cb62e8910da22d1df330da19493e7f06624b3dfb69407df35ded4d6",
+    "legacy_to_fresh_matches.csv": "028237d96453d137ee648f3ea11da21c8635ac19945254fd6275f23ba08a2238",
+    "legacy_workbook_inventory.csv": "f6406d6178877eecff36ecdcc982b18bddd46544762ee3fcf96b6b4f50f49390",
+    "refresh_summary.json": "51237baffe99a145deb4f74cf95444c4d0ba158438bb9be005cd9d5a29808a2d"
+  }
+}
