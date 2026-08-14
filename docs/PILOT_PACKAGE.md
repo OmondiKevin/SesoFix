@@ -44,6 +44,17 @@ The reviewer workbook uses a different random row order. Neither workbook
 contains previous Lesotho targets, rules, model outputs, or the other person's
 annotations.
 
+## Online annotation copies
+
+- [Primary annotation](https://docs.google.com/spreadsheets/d/1fmK-hxu5vMmd9aYb77MscDcRD1C_kWtn_Z3v1xZcFBQ/edit)
+- [Independent review](https://docs.google.com/spreadsheets/d/1j-nfWo7zec04SjFR_s8616n8e3ERkrcIo14jH5vQW7I/edit)
+
+Both files are native Google Sheets imported from the hashed local workbooks.
+Their tabs, 200 rows, formulas, dropdowns, conditional formatting, role labels,
+and visual layout were checked after conversion. Share only the relevant file
+link with each annotator; do not share the project-root folder during the blind
+pass. See `GOOGLE_DRIVE_WORKFLOW.md` for the current permission limitation.
+
 ## Workbook quality checks
 
 Both workbooks were generated from the same frozen manifest and independently

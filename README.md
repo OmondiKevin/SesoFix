@@ -53,6 +53,7 @@ Authoritative documents:
 - [Common Voice merge protocol](docs/COMMON_VOICE_REFRESH.md)
 - [Annotation protocol](docs/ANNOTATION_PROTOCOL.md)
 - [Pilot package](docs/PILOT_PACKAGE.md)
+- [Google Drive workflow](docs/GOOGLE_DRIVE_WORKFLOW.md)
 - [Dataset provenance](docs/DATA_PROVENANCE.md)
 - [Evidence audit](docs/REPRODUCIBILITY_STATUS.md)
 - [Paper outline](paper/PAPER_OUTLINE.md)

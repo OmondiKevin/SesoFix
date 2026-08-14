@@ -28,6 +28,7 @@ its evidence artifact exists.
 | P1.5 | Freeze deterministic 200-item pilot manifest | Complete | `data/manifests/pilot_v1_manifest.csv` |
 | P1.6 | Produce separate primary/reviewer annotation workbooks | Complete | `outputs/sesofix_pilot_v1/` |
 | P1.7 | Validate workbook formulas, controls, row counts, and visual layout | Complete | `docs/PILOT_PACKAGE.md` |
+| P1.8 | Create stable Drive structure and verified native Google Sheets copies | Complete | `docs/GOOGLE_DRIVE_WORKFLOW.md` |
 
 ## Phase 2 — pilot annotation
 
@@ -36,8 +37,9 @@ an independent Lesotho Sesotho reviewer is confirmed.
 
 | ID | Task | Status | Dependency |
 |---|---|---|---|
+| P2.0 | Restrict root Drive access or record procedural-only blinding | Pending | Project owner decision |
 | P2.1 | Primary collaborator annotates all 200 pilot items | Pending | P1 complete |
-| P2.2 | Independent Lesotho reviewer annotates all 200 blind | Pending | Reviewer recruited |
+| P2.2 | Independent Lesotho reviewer annotates all 200 blind | Pending | P2.0 and reviewer recruited |
 | P2.3 | Adjudicate disagreements while retaining both original annotations | Pending | P2.1–P2.2 |
 | P2.4 | Measure source acceptance, change prevalence, agreement, and time/item | Pending | P2.3 |
 | P2.5 | Freeze revised instructions and phenomenon taxonomy | Pending | Pilot analysis |
