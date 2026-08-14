@@ -37,8 +37,8 @@ file byte for byte.
 
 | Role | File | SHA-256 |
 |---|---|---|
-| Primary collaborator | `outputs/sesofix_pilot_v1/SesoFix_Pilot_Primary.xlsx` | `4bc8bd4a45b3cd784d136546677c5559130cf260be3cec6503ef552ca3cd8ae0` |
-| Independent reviewer | `outputs/sesofix_pilot_v1/SesoFix_Pilot_Reviewer.xlsx` | `b0ad5a541a76bd5e657071e3ace553eabcf136f4710cb7466034faa380271e57` |
+| Primary collaborator | `outputs/sesofix_pilot_v1/SesoFix_Pilot_Primary.xlsx` | `20f58d768e2f0db112da10c4a55f1b2954f2efeb0b3c3343e2cb354e8eed597e` |
+| Independent reviewer | `outputs/sesofix_pilot_v1/SesoFix_Pilot_Reviewer.xlsx` | `944119c9225b271fb730544216084d095fcf71a1c8516f47d68e647d08c3a12c` |
 
 The reviewer workbook uses a different random row order. Neither workbook
 contains previous Lesotho targets, rules, model outputs, or the other person's
@@ -78,9 +78,13 @@ to this frozen protocol state.
 
 1. Give the primary workbook only to the original collaborator.
 2. Give the reviewer workbook only to an independent Lesotho Sesotho reviewer.
-3. Require independent completion; do not share either person's decisions.
-4. Preserve the returned originals unchanged.
-5. Import responses by `Pilot_ID`, retain both annotators, and adjudicate only
+3. Assign the original collaborator code `P01`; assign independent reviewers
+   `R01`, `R02`, and so on. Annotators must not invent their own codes.
+4. Ask annotators to enter the actual annotation date in `YYYY-MM-DD` format
+   (for example, `2026-08-14`).
+5. Require independent completion; do not share either person's decisions.
+6. Preserve the returned originals unchanged.
+7. Import responses by `Pilot_ID`, retain both annotators, and adjudicate only
    after the blind pass is complete.
 
 The next repository tasks are P2.1–P2.5 in `WORKPLAN.md`.

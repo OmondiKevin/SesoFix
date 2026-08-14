@@ -30,11 +30,24 @@ and explain briefly. Do not guess.
 | `phenomena` | One or more controlled categories; optional during first pass |
 | `confidence` | high/medium/low |
 | `comment` | Explanation for ambiguity or exclusion |
-| `annotator_code` | Pseudonymous identifier |
-| `annotation_timestamp` | ISO timestamp |
+| `annotator_code` | Project-assigned pseudonymous identifier; never self-invented |
+| `annotation_timestamp` | Actual annotation date in `YYYY-MM-DD` format |
 
 `exact_copy_derived` is computed later from source and target. It is never entered
 as a substitute for the human `decision`.
+
+### Annotator codes and dates
+
+The project lead assigns codes before annotation begins. Annotators do not guess
+or create their own codes:
+
+- `P01` is assigned to the original primary collaborator;
+- `R01` is assigned to the first independent reviewer; and
+- later independent reviewers receive `R02`, `R03`, and so on.
+
+The private identity-to-code key is held separately from the annotation sheets.
+In each row, the annotator enters only the assigned code and the date that item
+was annotated, using `YYYY-MM-DD` (for example, `2026-08-14`).
 
 ## 3. Phenomenon taxonomy
 
