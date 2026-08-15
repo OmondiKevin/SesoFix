@@ -30,7 +30,7 @@ and explain briefly. Do not guess.
 | `phenomena` | One or more controlled categories; optional during first pass |
 | `confidence` | high/medium/low |
 | `comment` | Explanation for ambiguity or exclusion |
-| `annotator_code` | Project-assigned pseudonymous identifier; never self-invented |
+| `annotator_code` | Project-assigned and project-prefilled pseudonymous identifier |
 | `annotation_timestamp` | Actual annotation date in `YYYY-MM-DD` format |
 
 `exact_copy_derived` is computed later from source and target. It is never entered
@@ -38,16 +38,18 @@ as a substitute for the human `decision`.
 
 ### Annotator codes and dates
 
-The project lead assigns codes before annotation begins. Annotators do not guess
-or create their own codes:
+The project lead assigns and prefills codes before annotation begins. Annotators
+do not guess, create, or edit their own codes:
 
 - `P01` is assigned to the original primary collaborator;
 - `R01` is assigned to the first independent reviewer; and
 - later independent reviewers receive `R02`, `R03`, and so on.
 
 The private identity-to-code key is held separately from the annotation sheets.
-In each row, the annotator enters only the assigned code and the date that item
-was annotated, using `YYYY-MM-DD` (for example, `2026-08-14`).
+Each annotator receives a separate workbook or sheet copy with the assigned code
+already present in every row. The annotator leaves that code unchanged and enters
+only the actual date that item was annotated, using `YYYY-MM-DD` (for example,
+`2026-08-15`). A row cannot pass workbook QC without both fields.
 
 ## 3. Phenomenon taxonomy
 

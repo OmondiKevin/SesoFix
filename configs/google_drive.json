@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "last_verified": "2026-08-14",
+  "last_verified": "2026-08-15",
   "project_root": {
     "id": "1jC_13ekMXzxu1cKEbRlqXoA7jdV_-6VI",
     "name": "SesoFix",
@@ -28,12 +28,12 @@
     "primary_sheet": {
       "id": "1fmK-hxu5vMmd9aYb77MscDcRD1C_kWtn_Z3v1xZcFBQ",
       "url": "https://docs.google.com/spreadsheets/d/1fmK-hxu5vMmd9aYb77MscDcRD1C_kWtn_Z3v1xZcFBQ/edit",
-      "source_xlsx_sha256": "20f58d768e2f0db112da10c4a55f1b2954f2efeb0b3c3343e2cb354e8eed597e"
+      "source_xlsx_sha256": "7f8d6f236d02c1d447b9191f8d9013fbec722b6d14f8d542ed114a7e09314077"
     },
     "independent_review_sheet": {
       "id": "1j-nfWo7zec04SjFR_s8616n8e3ERkrcIo14jH5vQW7I",
       "url": "https://docs.google.com/spreadsheets/d/1j-nfWo7zec04SjFR_s8616n8e3ERkrcIo14jH5vQW7I/edit",
-      "source_xlsx_sha256": "944119c9225b271fb730544216084d095fcf71a1c8516f47d68e647d08c3a12c"
+      "source_xlsx_sha256": "5f377bdf55671aa8b1c5f5efe7cf16e9cfd893715499bd552dd59fbaecfca189"
     }
   },
   "control_files": {
