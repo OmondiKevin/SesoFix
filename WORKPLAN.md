@@ -1,6 +1,6 @@
 # SesoFix workplan
 
-**Last updated:** 2026-08-14
+**Last updated:** 2026-08-15
 **Policy:** no local model training
 
 This is the authoritative project task list. A task is marked complete only when

@@ -2,6 +2,8 @@
 
 **Frozen:** 2026-08-14
 
+**Annotation interface updated:** 2026-08-15
+
 **Role:** development-only protocol pilot
 
 **Training performed:** no
@@ -37,8 +39,8 @@ file byte for byte.
 
 | Role | File | SHA-256 |
 |---|---|---|
-| Primary collaborator | `outputs/sesofix_pilot_v1/SesoFix_Pilot_Primary.xlsx` | `20f58d768e2f0db112da10c4a55f1b2954f2efeb0b3c3343e2cb354e8eed597e` |
-| Independent reviewer | `outputs/sesofix_pilot_v1/SesoFix_Pilot_Reviewer.xlsx` | `944119c9225b271fb730544216084d095fcf71a1c8516f47d68e647d08c3a12c` |
+| Primary collaborator | `outputs/sesofix_pilot_v1/SesoFix_Pilot_Primary.xlsx` | `7f8d6f236d02c1d447b9191f8d9013fbec722b6d14f8d542ed114a7e09314077` |
+| Independent reviewer | `outputs/sesofix_pilot_v1/SesoFix_Pilot_Reviewer.xlsx` | `5f377bdf55671aa8b1c5f5efe7cf16e9cfd893715499bd552dd59fbaecfca189` |
 
 The reviewer workbook uses a different random row order. Neither workbook
 contains previous Lesotho targets, rules, model outputs, or the other person's
@@ -65,6 +67,7 @@ checked for:
 - protected-looking source columns and visually distinct editable columns;
 - controlled dropdowns for categorical decisions;
 - an automatic row-level QC status and live completion counts;
+- project-prefilled `P01`/`R01` codes and QC enforcement of code and date;
 - no `#REF!`, `#DIV/0!`, `#VALUE!`, `#NAME?`, or `#N/A` formula errors;
 - readable headers, wrapped source text, frozen identifier columns, and filters;
 - separate annotator/reviewer labels and different row orders; and
@@ -78,10 +81,11 @@ to this frozen protocol state.
 
 1. Give the primary workbook only to the original collaborator.
 2. Give the reviewer workbook only to an independent Lesotho Sesotho reviewer.
-3. Assign the original collaborator code `P01`; assign independent reviewers
-   `R01`, `R02`, and so on. Annotators must not invent their own codes.
-4. Ask annotators to enter the actual annotation date in `YYYY-MM-DD` format
-   (for example, `2026-08-14`).
+3. Give the original collaborator the primary file with `P01` already prefilled.
+   Give the first independent reviewer a separate file with `R01` prefilled;
+   later reviewers receive separate copies with `R02`, `R03`, and so on.
+4. Tell annotators not to change the prefilled code and to enter only the actual
+   annotation date in `YYYY-MM-DD` format (for example, `2026-08-15`).
 5. Require independent completion; do not share either person's decisions.
 6. Preserve the returned originals unchanged.
 7. Import responses by `Pilot_ID`, retain both annotators, and adjudicate only
